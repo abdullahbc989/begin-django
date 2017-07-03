@@ -1,0 +1,17 @@
+{% extends "blog/base.html"  %}
+
+{% block title %}
+    {{ post.title|capfirst }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title|capfirst }}</h1>
+    <p>Pub date: {{ post.pub_date }}</p>
+    <p class="post-info">
+            {% include 'blog/post_info.html' %}
+    </p>
+    <p>
+      {{ post.content }}
+    </p>
+
+{% endblock %}
