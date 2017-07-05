@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
+
     <h1>{{ post.title|capfirst }}</h1>
-    <p>Pub date: {{ post.pub_date }}</p>
     <p class="post-info">
-            {% include 'blog/post_info.html' %}
+        {% include 'blog/post_info.html' %}
+        | <span><a href="{% url 'post_update' post.id  %}">Edit</a></span>
     </p>
     <p>
-      {{ post.content }}
+        {{ post.content }}
     </p>
 
 {% endblock %}
