@@ -122,6 +122,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_sitewide'),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# It contains the absolute path to the file system where Media files will be uploaded. It accepts a string not a list
+# or tuple.
+
+MEDIA_URL = '/media/'
+# Works similar to STATIC_URL, but instead used to access media files. Just below the MEDIA_ROOT setting add the
+# following code to the end of settings.py file.
+
 
 # Email settings
 
