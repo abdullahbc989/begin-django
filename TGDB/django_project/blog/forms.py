@@ -1,5 +1,5 @@
 from django import forms
-from .models import Author, Tag, Category, Post
+from .models import Author, Tag, Category, Post, Feedback
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 
@@ -77,3 +77,10 @@ class PostForm(forms.ModelForm):
         # if title exists create slug from title
         if title:
             self.slug = slugify(title)
+
+
+class FeedbackForm(forms.ModelForm):
+
+    class Meta:
+        model = Feedback
+        fields = '__all__'

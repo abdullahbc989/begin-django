@@ -1,6 +1,8 @@
 from django.conf import settings
 from .models import Author, Tag, Category, Post
+from .forms import FeedbackForm
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
+from django.core.mail import mail_admins
 
 
 def index(request):
@@ -53,5 +55,26 @@ def post_by_author(request, name):
     return render(request, 'blog/post_by_author.html', context)
 
 
-def test_redirect(request):
-    return redirect('post_list', permanent=True)
+def feedback(request):
+    if request.method == 'POST':
+        f = FeedbackForm(request.POST)
+        if f.is_valid():
+            name = f.cleaned_data['name']
+            sender = f.cleaned_data['email']
+            subject = "You have a new Feedback from {}:{}".format(name, sender)
+            message = "Subject: {}\n\nMessage: {}".format(f.cleaned_data['subject'], f.cleaned_data['message'])
+
+            try:
+                mail_admins(subject, message)
+                f.save()
+                print("Success")
+                message.add_message(request, message.SUCCESS, 'Feedback Sent!')
+            except:
+                print("Failed")
+                message.add_message(request, message.INFO, 'Unable to send feedback, try again')
+
+            return redirect('feedback')
+
+    else:
+        f = FeedbackForm()
+    return render(request, 'blog/feedback.html', {'form': f})

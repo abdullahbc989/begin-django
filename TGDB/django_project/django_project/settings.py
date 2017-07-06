@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,3 +121,48 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Email settings
+
+SERVER_EMAIL = 'infooveriq@gmail.com'
+# It specifies the email address which Django will use to send error messages to ADMINS and MANAGERS.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# It specifies the name of the backend to use for sending emails. 'django.core.mail.backends.smtp.EmailBackend' means
+# that Django will use SMTP Server to send emails. Django has many other backends. Here are other two commonly used
+# backends:
+# 1) django.core.mail.backends.filebased.EmailBackend
+# 2) django.core.mail.backends.console.EmailBackend
+
+# 'django.core.mail.backends.filebased.EmailBackend' allows us to write the email to a file instead of forwarding it to
+#  a SMTP server.
+
+# Similarly, 'django.core.mail.backends.console.EmailBackend' prints the email directly to the console.
+
+EMAIL_HOST = 'smtp.gmail.com'
+# It specifies the address of the Email Server or SMTP Server. In this case we are using Gmail SMTP Server i.e
+# smtp.gmail.com.
+EMAIL_HOST_PASSWORD = 'wordpass'
+# Password of the account to defined in the EMAIL_HOST.
+EMAIL_HOST_USER = SERVER_EMAIL
+#  It specifies the username of the account to use with the host defined in EMAIL_HOST.
+EMAIL_PORT = 587
+# Port to use to connect to the SMTP server in EMAIL_HOST.
+EMAIL_USE_TLS = True
+# It specifies whether to use TLS secure or not.
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# It specifies the default email address to use for ordinary correspondence from the site managers. In our case SERVER
+# EMAIL, EMAIL_HOST_USER and DEFAULT_FROM_EMAIL is same, so Django will use "infooveriq@gmail.com" for ordinary
+# correspondence as well as for reporting errors.
+
+ADMINS = [
+    ('Doloh', 'abdullahbc989@gmail.com'),
+]
+# It specifies a list of people to send error notifications. When site is in production i.e DEBUG = False and and views
+# raises an exception then Django will send an email to all the to all the people specified in the ADMINS list. Each
+# item in ADMINS list is a tuple.
+# MANAGERS: It specifies a list of people to send broken link emails for 404 NOT FOUND errors. It's accepts emails in
+# the same format as ADMINS.
+
+# To enable this feature you have add 'django.middleware.common.BrokenLinkEmailsMiddleware' middleware in the MIDDLEWARE
+#  setting in settings.py.
