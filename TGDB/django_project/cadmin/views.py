@@ -48,3 +48,10 @@ def post_update(request, pk):
         f = PostForm(instance=post)
 
     return render(request, 'cadmin/post_update.html', {'form': f, 'post': post})
+
+
+def home(request):
+    if not request.user.is_authenticated():
+        return redirect('login')
+
+    return render(request, 'blog/admin_page.html')

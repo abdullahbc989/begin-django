@@ -3,8 +3,8 @@ from .models import Author, Tag, Category, Post
 from .forms import FeedbackForm
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.http import HttpResponse
-from django.core.mail import mail_admins
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.mail import mail_admins, message
+from django.contrib import auth
 from django_project import helpers
 
 
@@ -180,7 +180,7 @@ def lousy_login(request):
             request.session['logged_in'] = True
             return redirect('lousy_secret')
         else:
-            messages.error(request, 'Error wrong username/password')
+            message.error(request, 'Error wrong username/password')
 
     return render(request, 'blog\lousy_login.html')
 
@@ -201,3 +201,35 @@ def lousy_logout(request):
         return redirect('lousy_login')
 
     return render(request, 'blog/lousy_logout.html')
+
+
+def login(request):
+    if request.user.is_authenticated():
+        return redirect('admin_page')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            # correct username and password login the user
+            auth.login(request, user)
+            return redirect('admin_page')
+
+        else:
+            message.error(request, 'Error wrong username/password')
+
+    return render(request, 'blog/login.html')
+
+
+def logout(request):
+    auth.logout(request)
+    return render(request,'blog/logout.html')
+
+
+def admin_page(request):
+    if not request.user.is_authenticated():
+        return redirect('login')
+
+    return render(request, 'blog/admin_page.html')
